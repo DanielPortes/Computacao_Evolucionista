@@ -1,0 +1,81 @@
+[build-system]
+requires = ["hatchling>=1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "computacao-evolucionista"
+version = "0.1.0"
+description = "Repositorio consolidado para os exercicios de Computacao Evolucionista."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Portes" },
+]
+dependencies = [
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "plotly>=6.0",
+  "pydantic>=2.11",
+  "pymoo>=0.6.1",
+  "scikit-learn>=1.5",
+  "torch>=2.4",
+  "tsplib95>=0.7.1",
+  "typer>=0.16",
+]
+
+[project.scripts]
+ce = "ce.cli:app"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.15",
+  "pytest>=8.3",
+  "pytest-cov>=5.0",
+  "ruff>=0.11",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ce"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = ["legacy", "notebooks/legacy"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "B",
+  "UP",
+]
+
+[tool.mypy]
+python_version = "3.11"
+mypy_path = "src"
+strict = true
+packages = ["ce"]
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = ["pymoo.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["tsplib95.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["torch.*"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["pandas", "plotly.*", "sklearn.preprocessing", "sklearn.model_selection"]
+ignore_missing_imports = true
